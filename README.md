@@ -270,7 +270,7 @@ Set up once, then never update the repo by hand:
 
 1. **Scheduled weekly audit** — every Monday at 09:00 UTC (`.github/workflows/weekly-maintenance.yml`), scanning for new Anthropic/ElevenLabs releases, new community adapters, and security advisories in `requirements.txt`.
 2. **Automated upgrade & regression testing** — updates `requirements.txt`, runs `pytest` in dry-run, and prepares a draft release with a `CHANGELOG` on a staging branch.
-3. **One-click approval email** — a summary goes to `chaeiourie@gmail.com` with a bulleted changelog, test status, and the line: *"Reply 'Approve' to auto-merge, tag release, and push to GitHub."*
+3. **One-click approval email** — a summary goes to the address you set in the `OWNER_EMAIL` repository secret, with a bulleted changelog, test status, and the line: *"Reply 'Approve' to auto-merge, tag release, and push to GitHub."*
 4. **Autonomous release on approval** — on an "Approve" reply, the staging branch merges to `main`, a semantic version tag is bumped, and the release is published with a confirmation email.
 
 **Safety:** the maintenance loop prepares and waits. Nothing merges, tags, or publishes without your explicit "Approve".
