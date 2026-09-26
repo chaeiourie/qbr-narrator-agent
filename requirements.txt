@@ -1,0 +1,17 @@
+# QBR Narrator Agent — Python dependencies
+#
+# The core engine runs with the standard library alone (offline template mode).
+# These packages unlock live generation, voice, and the maintenance tooling.
+
+# Live LLM generation & tone analysis (optional — falls back to local template)
+anthropic>=0.40.0
+
+# Voice narration & Instant Voice Cloning (optional — falls back to text-only)
+elevenlabs>=1.0.0
+
+# Environment loading for non-technical users
+python-dotenv>=1.0.0
+
+# Testing & maintenance
+pytest>=8.0.0
+pip-audit>=2.7.0

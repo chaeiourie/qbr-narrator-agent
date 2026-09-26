@@ -1,0 +1,18 @@
+.DS_Store
+.env
+/node_modules/
+
+# React Router
+/.react-router/
+/build/
+
+# Generated output (decks, audio, checklists) — never commit customer data
+/output/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Maintenance run artifacts
+maintenance/last_audit.json

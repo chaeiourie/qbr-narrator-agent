@@ -1,0 +1,99 @@
+{
+  "$schema": "https://qbr-narrator-agent/integrations.schema.json",
+  "description": "QBR Narrator Agent — CS Tool Registry bridge. This file is the machine-readable mirror of the pipeline's CS Tool Registry scoped to this agent. It is generated from engine/integrations.py and is read by the no-code Connector Dashboard. End users never edit this file by hand — they use the dashboard toggles. Tools marked 'watch' have no usable no-code integration surface and are NOT wired.",
+  "generated_from": "engine/integrations.py",
+  "registry_version": "1.0.0",
+  "ai_services": [
+    {
+      "id": "anthropic",
+      "name": "Anthropic Claude",
+      "category": "LLM — deck text, translation & tone analysis",
+      "auth_type": "API key",
+      "config_keys": ["ANTHROPIC_API_KEY"],
+      "status": "integrated",
+      "note": "Requires Build Tier 1 prepaid API credit ($5 min) — an API key, not a Claude Pro subscription."
+    },
+    {
+      "id": "elevenlabs",
+      "name": "ElevenLabs",
+      "category": "Voice synthesis & Instant Voice Cloning",
+      "auth_type": "API key",
+      "config_keys": ["ELEVENLABS_API_KEY", "ELEVENLABS_VOICE_ID", "ELEVENLABS_MODEL_ID"],
+      "status": "integrated",
+      "note": "Requires Starter plan ($5/mo) or higher to unlock Instant Voice Cloning and commercial voice generation."
+    }
+  ],
+  "cs_tools": [
+    {
+      "id": "gainsight",
+      "name": "Gainsight",
+      "category": "Health scoring / CS platform",
+      "what_it_does": "Pull health scores, usage, and account attributes for the QBR.",
+      "auth_type": "API key",
+      "config_keys": ["GAINSIGHT_API_KEY"],
+      "status": "integrated",
+      "read_only_by_default": true
+    },
+    {
+      "id": "salesforce",
+      "name": "Salesforce",
+      "category": "CRM",
+      "what_it_does": "Pull MRR, account objects, and opportunity/renewal data.",
+      "auth_type": "OAuth2 / JWT",
+      "config_keys": ["SALESFORCE_INSTANCE_URL", "SALESFORCE_CLIENT_ID", "SALESFORCE_CLIENT_SECRET"],
+      "status": "integrated",
+      "read_only_by_default": true
+    },
+    {
+      "id": "zendesk",
+      "name": "Zendesk",
+      "category": "Support / ticket data",
+      "what_it_does": "Pull support ticket volume, sentiment, and open items.",
+      "auth_type": "API token",
+      "config_keys": ["ZENDESK_SUBDOMAIN", "ZENDESK_API_TOKEN"],
+      "status": "integrated",
+      "read_only_by_default": true
+    },
+    {
+      "id": "hubspot",
+      "name": "HubSpot",
+      "category": "CRM / comms",
+      "what_it_does": "Pull company records, tickets, and engagement signals.",
+      "auth_type": "API key / OAuth2",
+      "config_keys": ["HUBSPOT_API_KEY"],
+      "status": "integrated",
+      "read_only_by_default": true
+    },
+    {
+      "id": "totango",
+      "name": "Totango",
+      "category": "Health scoring / CS platform",
+      "what_it_does": "Pull customer health and journey data.",
+      "auth_type": "API key",
+      "config_keys": ["TOTANGO_API_KEY"],
+      "status": "integrated",
+      "read_only_by_default": true
+    },
+    {
+      "id": "churnzero",
+      "name": "ChurnZero",
+      "category": "Health scoring / churn",
+      "what_it_does": "Pull health scores, usage signals, and playbook data.",
+      "auth_type": "API key",
+      "config_keys": ["CHURNZERO_API_KEY"],
+      "status": "integrated",
+      "read_only_by_default": true
+    },
+    {
+      "id": "gong",
+      "name": "Gong",
+      "category": "Call analytics / revenue intelligence",
+      "what_it_does": "Pull call sentiment and meeting signals.",
+      "auth_type": "OAuth2",
+      "config_keys": ["GONG_CLIENT_ID", "GONG_CLIENT_SECRET"],
+      "status": "watch",
+      "read_only_by_default": true,
+      "note": "Requires a Gong OAuth2 app that is not a stable no-code path in this lightweight build. Marked 'watch' in the CS Tool Registry; NOT wired into the connector dashboard as if it worked."
+    }
+  ]
+}
