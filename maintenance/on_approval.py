@@ -23,7 +23,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-OWNER_EMAIL = "chaeiourie@gmail.com"
+# The owner's approval address is supplied at runtime (e.g. a GitHub Actions
+# secret named OWNER_EMAIL). No personal address is hardcoded in this repo.
+OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "owner@example.com")
 
 
 def _run(cmd: list[str]) -> tuple[int, str]:
