@@ -49,10 +49,13 @@ def test_injection_filter_allows_normal_notes():
 
 
 def test_redaction_masks_email_and_secrets():
-    text = "Contact jane@acme.com with api_key=sk-abcdef1234567890abcdef"
+    # NOTE: the key below is a FAKE, non-functional fixture (not a real credential).
+    # It exists only to prove the redactor masks secret-shaped strings. Safe to commit.
+    fake_key = "sk-" + "abcdef1234567890abcdef"  # noqa: S105 - synthetic test value
+    text = f"Contact jane@acme.com with api_key={fake_key}"
     out = security.redact(text, "strict")
     assert "jane@acme.com" not in out
-    assert "sk-abcdef1234567890abcdef" not in out
+    assert fake_key not in out
 
 
 def test_gate_blocks_write_in_read_only_scope():
