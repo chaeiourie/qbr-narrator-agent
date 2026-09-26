@@ -25,7 +25,9 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-OWNER_EMAIL = "chaeiourie@gmail.com"
+# The owner's approval address is supplied at runtime (e.g. a GitHub Actions
+# secret named OWNER_EMAIL). No personal address is hardcoded in this repo.
+OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "owner@example.com")
 REPO = "chaeiourie/qbr-narrator-agent"
 ROOT = Path(__file__).resolve().parent.parent
 
