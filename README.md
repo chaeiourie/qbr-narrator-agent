@@ -6,7 +6,7 @@ Turn raw account notes into a **translated QBR slide deck with pinned voice narr
 
 Account review prep eats 12+ hours per account: pulling data, writing the narrative, translating it for a global stakeholder, and recording a voiceover that matches. QBR Narrator Agent turns that into one bundled deliverable — a themed deck with a "Listen" button pinned to every slide, and a checklist that spells out exactly what you need to run it yourself.
 
-This is a lightweight, non-technical agent: a runnable web app with a form and a button, plus a Python engine that produces the real files. No code, no terminal, no setup beyond pasting your notes. It is built on a **Dual-Layer Enterprise Governance Engine** so the automation is secure by default and the human stays in charge of judgment and commitments.
+This is a lightweight agent you run on your **own** computer: a web app with a form and a button, plus a Python engine that produces the real files. Setup is copy-paste — no coding required (see **How to Run It** below). It is built on a **Dual-Layer Enterprise Governance Engine** so the automation is secure by default and the human stays in charge of judgment and commitments.
 
 ---
 
@@ -54,36 +54,92 @@ Account review prep eats 12+ hours per account pulling data, hand-building slide
 
 **This tool never uses the author's API keys, and it never asks you for a password.** You bring your own Anthropic and ElevenLabs keys, and they stay yours.
 
-- **No shared tokens.** There are no author-owned credentials baked into this repo, the web app, or any hosted instance. Every key is one *you* create on *your* account.
+- **No shared tokens.** There are no author-owned credentials baked into this repo or the web app. Every key is one *you* create on *your* account. There is no hosted instance run by the author.
 - **Your keys, your account, your spend.** Generation is billed to your own Anthropic and ElevenLabs accounts. The author pays nothing on your behalf and cannot see your usage.
-- **Where your keys live.** In the web app you paste your keys into the **Connect your tools** panel; they are held only in your browser session (in-memory / local storage on your own device) and are sent *directly* to Anthropic and ElevenLabs — never to the author, never to any third-party server.
+- **Where your keys live.** In the web app you paste your keys into the **Bring your own keys** panel; they are held only in your browser session (in-memory / local storage on your own device) and are sent *directly* to Anthropic and ElevenLabs — never to the author, never to any third-party server.
 - **In the Python engine** your keys live in a local `.env` file on your own machine. That file is git-ignored and is never committed.
 - **Nothing is shared between users.** Each CSM runs their own copy with their own keys.
 
-> If you would rather not manage keys at all, use the **Kavela marketplace agent** option in the setup guide below — you connect your own accounts once and the agent runs on your behalf.
+> **No keys? It still runs.** Without the two AI keys the engine runs end-to-end in **local-template mode** — the deck and checklist still generate; only the live AI text and voice are skipped. Add keys when you are ready.
 
-## How to Deploy
+## How to Run It (on your own computer)
 
-Assume you have never used a terminal. There are two ways to run this — pick one.
+> **There is no hosted version of this app, and there never will be.** You run this codebase on **your own computer**, with **your own keys**, on **your own data**. Nothing runs on the author's machine or account. This is deliberate: it means **you** stay in full control of any customer data and any AI calls. See **"Who is responsible for what"** below.
 
-### Option A — the web app (no terminal, no install)
+You do **not** need to be a developer. Below are copy-paste steps for a **MacBook** and for **Windows**. Give yourself about 15 minutes the first time.
 
-1. Open the app — a single page with a form and a button.
-2. In the **Connect your tools** panel, paste **your own** Anthropic and ElevenLabs keys (see the step-by-step guide below). These are your keys, stored in your browser only.
-3. Fill in the customer name, target language, recipient email, and paste your raw notes.
-4. Press **Generate deck + checklist**. Review the deck slides (each with a "Listen" button) and the checklist tab.
-5. Press **Approve & queue dispatch** — only then does anything go out.
+### What you need first
 
-### Option B — the Python engine (produces the real files)
+- A computer (Mac or Windows) with an internet connection.
+- **Node.js 20 or newer** (for the web app) and/or **Python 3.11 or newer** (for the engine). Install links are in the steps below.
+- Your own **Anthropic** and **ElevenLabs** API keys — see the step-by-step guide further down.
 
-1. Install Python 3.11+ and, in a terminal, run `pip install -r requirements.txt`.
-2. Copy `.env.example` to `.env` and fill in **your own** keys (see the step-by-step guide below).
-3. Run the pre-flight check: `python qbr_agent.py --test-keys` — this tells you which keys are active.
-4. Generate a sample bundle: `python qbr_agent.py --demo` — writes the HTML deck and the checklist to `./output`.
+### Step 1 — Download the code
+
+You have two easy options — pick one:
+
+- **Option 1 (no tools needed):** On the GitHub page, click the green **Code** button, then **Download ZIP**. Unzip the folder somewhere easy to find (for example your **Documents** folder). You will get a folder called `qbr-narrator-agent`.
+- **Option 2 (if you have Git):** In a terminal, run `git clone https://github.com/chaeiourie/qbr-narrator-agent.git`.
+
+### Step 2 — Open a terminal in that folder
+
+A "terminal" is just a window where you type commands. You will only type the exact lines shown.
+
+- **MacBook:** Open **Terminal** (press `Cmd + Space`, type `Terminal`, press Enter). Then type `cd ` (with a space), drag the `qbr-narrator-agent` folder from Finder into the Terminal window, and press Enter. The folder path fills in automatically.
+- **Windows:** Open the `qbr-narrator-agent` folder in File Explorer. Click the address bar, type `cmd`, and press Enter. A black Command Prompt window opens already pointed at the folder.
+
+### Step 3 — Run the app (choose ONE of the two below)
+
+#### 3A — The web app (a form and a button in your browser)
+
+1. Install **Node.js**: go to **nodejs.org**, download the **LTS** version, and run the installer (click Next through it). Close and reopen your terminal afterwards.
+2. In the terminal, type this and press Enter:
+   ```
+   npm install
+   ```
+   This downloads the app's building blocks. It takes a minute or two the first time.
+3. Then type this and press Enter:
+   ```
+   npm run dev
+   ```
+4. The terminal will print a line like `Local: http://localhost:5173/`. Open that address in your browser (Chrome, Safari, or Edge). **That is the app** — the form, the **Bring your own keys** panel, and the **Connect your CS tools** dashboard.
+5. When you are finished, click back in the terminal and press `Ctrl + C` to stop the app.
+
+#### 3B — The Python engine (produces the real deck and checklist files)
+
+1. Install **Python 3.11+**: go to **python.org/downloads**, download the installer, and run it. **On Windows, tick the box "Add Python to PATH"** on the first screen — this matters.
+2. In the terminal, type this and press Enter:
+   ```
+   pip install -r requirements.txt
+   ```
+3. Make your keys file: copy `.env.example` to a new file named `.env` in the same folder, then open `.env` in any text editor (Notepad on Windows, TextEdit on Mac) and paste in **your own** keys. Save it. (`.env` is git-ignored — it is never uploaded anywhere.)
+4. Check your keys are working:
+   ```
+   python qbr_agent.py --test-keys
+   ```
+   You should see `[ACTIVE]` next to the keys you filled in.
+5. Generate a sample bundle (writes the deck and checklist into the `output` folder):
+   ```
+   python qbr_agent.py --demo
+   ```
 
 **Budget guard:** `MAX_COST_PER_DECK` (default `$0.50`) is a hard ceiling — the agent refuses to run if the projected cost would exceed it. **`TEST_MODE=true`** (the default) keeps every run local, so you can explore safely.
 
 > Without the two AI keys the engine still runs end-to-end in **local-template mode** (deck + checklist generate; audio is skipped). Add your keys to unlock live generation and voice.
+
+---
+
+## Who is responsible for what
+
+This project is published as **open-source code for you to run yourself**. It is **not** a hosted service, and the author does **not** operate it on anyone's behalf.
+
+- **You run it, you own it.** The author provides the code under the MIT licence and nothing more. The author does not receive, store, or process your data or your customers' data, and has no access to your keys, your accounts, or your outputs.
+- **Your keys, your accounts.** You bring your own Anthropic and ElevenLabs keys and pay for your own usage. The author pays nothing on your behalf.
+- **Your data, your responsibility.** Any customer notes, PII, or confidential information you put into the tool stays on **your** machine and goes only to the providers **you** have configured. You are responsible for having the right to use that data and for complying with your own company's policies and applicable privacy law (for example GDPR, CCPA).
+- **No warranty.** The code is provided "as is", without warranty of any kind. You are responsible for reviewing every generated deck, translation, and narration before it reaches a customer. See the [LICENSE](LICENSE).
+- **No liability.** To the fullest extent permitted by law, the author accepts no liability for any loss, claim, or damage arising from your use of this code, including any data exposure, misuse, or downstream consequence.
+
+In short: **the code is yours to run; the responsibility for how you run it is yours too.**
 
 ---
 
@@ -101,7 +157,7 @@ Claude writes and translates your slide text and reads your tone sample. You nee
 4. Click **Add payment method** and enter a card. Anthropic's API is **prepaid** — add at least **US$5** of credit. (A Claude Pro subscription does **not** cover API usage; this is a separate, pay-as-you-go balance.)
 5. In the left menu, open **API Keys** and click **Create Key**. Name it something like `qbr-narrator`.
 6. **Copy the key now** — it starts with `sk-ant-...`. Anthropic shows it only once. Paste it somewhere safe for a moment (you will paste it into the tool next).
-7. Paste it into your `.env` file as `ANTHROPIC_API_KEY=sk-ant-...` (Option B), or into the **Connect your tools** panel (Option A).
+7. Paste it into your `.env` file as `ANTHROPIC_API_KEY=sk-ant-...` (for the Python engine), or into the **Bring your own keys** panel in the web app.
 
 **Rough cost:** a full deck + translation is a few cents. The `MAX_COST_PER_DECK` guard stops any run that would exceed your ceiling.
 
@@ -115,7 +171,7 @@ ElevenLabs turns each slide's narration into a spoken MP3 in the deck's language
 4. In the left menu, click your **profile icon** (bottom-left) and open **API Keys** (direct link: **elevenlabs.io/app/settings/api-keys**).
 5. Click **Create API Key**, name it `qbr-narrator`, and click **Create**.
 6. **Copy the key now** — it is shown only once. Paste it somewhere safe for a moment.
-7. Paste it into your `.env` file as `ELEVENLABS_API_KEY=...` (Option B), or into the **Connect your tools** panel (Option A).
+7. Paste it into your `.env` file as `ELEVENLABS_API_KEY=...` (for the Python engine), or into the **Bring your own keys** panel in the web app.
 8. *(Optional)* If you want the narration in a specific voice, copy that voice's **Voice ID** from **Voices → your voice → ID** and set `ELEVENLABS_VOICE_ID=...`. Leave it blank to use the built-in formal executive narrator.
 
 ### Part 3 — Email (optional, for dispatch)
@@ -136,24 +192,6 @@ python qbr_agent.py --test-keys
 ```
 
 You should see `[ACTIVE]` next to `ANTHROPIC_API_KEY` and `ELEVENLABS_API_KEY`. If a key shows `missing`, re-copy it (a trailing space is the usual culprit).
-
----
-
-## Option C — use it as a Kavela marketplace agent (no keys to manage yourself)
-
-If you would rather not create and manage API keys, the same QBR workflow is packaged as a **Kavela marketplace agent**. You connect your own Anthropic and ElevenLabs accounts once through a secure connector, and the agent runs the full pipeline on your behalf — your keys are stored in Kavela's connector vault, never in a file on your laptop.
-
-**How to set it up:**
-
-1. Open the **QBR Narrator Agent** listing on the Kavela marketplace.
-2. Click **Connect** on the **Anthropic** connector and paste your Anthropic API key (from Part 1 above). Kavela stores it in an encrypted vault.
-3. Click **Connect** on the **ElevenLabs** connector and paste your ElevenLabs API key (from Part 2 above).
-4. *(Optional)* Connect your email provider if you want the agent to dispatch the deck for you.
-5. Open the agent and paste your raw account notes. It returns the translated deck with per-slide narration plus the setup checklist — same governance, same human approval gate.
-
-**Same guarantees, either way:** your keys are yours, nothing runs on the author's account, and nothing is dispatched to a customer without your explicit approval.
-
-> **Note on the marketplace listing:** the Kavela listing is published from this same open-source repo, so the governance controls you can read in `engine/security.py` and `engine/decision.py` are exactly what runs. There is no hidden second implementation.
 
 ---
 
