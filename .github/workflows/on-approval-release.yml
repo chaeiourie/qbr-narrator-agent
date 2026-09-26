@@ -1,0 +1,37 @@
+name: Release On Approval
+
+# Fires only when the owner replies "Approve" to the weekly maintenance email.
+# The approval mechanism posts a repository_dispatch event with the staging
+# branch; the job then merges, tags, and publishes. Nothing happens without it.
+on:
+  repository_dispatch:
+    types: [approve-release]
+  workflow_dispatch:
+    inputs:
+      staging_branch:
+        description: "Staging branch to release"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Merge, tag and publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="${{ github.event.client_payload.staging_branch || github.event.inputs.staging_branch }}"
+          git config user.name "qbr-narrator-bot"
+          git config user.email "bot@users.noreply.github.com"
+          python maintenance/on_approval.py --approve --staging-branch "$BRANCH" --version v1.0.1 --part minor
