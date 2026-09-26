@@ -4,7 +4,7 @@ Stage 1  Initial Input & Language Parity
 Stage 2  Tone Governance & Interactive Voice Prompt
 Stage 3  Second-Layer Thinking & Formatting
 Stage 4  Dual Generation (Deck + Setup Checklist)
-Stage 5  Manager Preview & Approval (human gate)
+Stage 5  Customer Success Manager Preview & Approval (human gate)
 Stage 6  Zero-Maintenance Weekly Loop (see maintenance/)
 
 The engine is deterministic and offline-safe: if the Anthropic or ElevenLabs
@@ -271,17 +271,30 @@ def build_checklist(qbr: QbrInput) -> str:
 Generated for **{qbr.customer_name}** ({resolve_language(qbr.target_language)}).
 Active email adapter: **{adapter}**. Budget guard: **${max_cost}** per deck.
 
+> **Bring your own keys.** Every key below is one YOU create on YOUR OWN account.
+> This tool ships with no author-owned credentials, nothing runs on the author's
+> account, and the author never sees your usage. Budget roughly US$10 to start.
+
 ## 1. Anthropic (Claude) — deck text, translation & tone analysis
-- [ ] Create an account at console.anthropic.com
-- [ ] Add **Build Tier 1 prepaid API credit** ($5 minimum)
-- [ ] Important: this needs an **API key**, NOT a Claude Pro web subscription
-- [ ] Copy the key into `ANTHROPIC_API_KEY` in your `.env`
+- [ ] Go to console.anthropic.com and click **Sign up** (create an account / sign in)
+- [ ] Verify your email, then sign in to the Console
+- [ ] Open **Plans & Billing** in the left menu
+- [ ] Click **Add payment method** and add at least **US$5 of prepaid credit**
+      (a Claude Pro subscription does NOT cover API usage — this is separate)
+- [ ] Open **API Keys** and click **Create Key** (name it e.g. `qbr-narrator`)
+- [ ] Copy the key now — it starts with `sk-ant-...` and is shown only once
+- [ ] Paste it into `ANTHROPIC_API_KEY` in your `.env` (or the web app's key panel)
 
 ## 2. ElevenLabs — voice narration & Instant Voice Cloning
-- [ ] Create an account at elevenlabs.io
-- [ ] Subscribe to the **Starter plan ($5/mo) or higher**
+- [ ] Go to elevenlabs.io and click **Sign up**
+- [ ] Open **Subscription** and choose the **Starter plan (US$5/month) or higher**
       (Instant Voice Cloning and commercial voice generation require it)
-- [ ] Copy your key into `ELEVENLABS_API_KEY` in your `.env`
+- [ ] Complete checkout
+- [ ] Click your **profile icon** (bottom-left) and open **API Keys**
+      (direct link: elevenlabs.io/app/settings/api-keys)
+- [ ] Click **Create API Key**, name it `qbr-narrator`, and click **Create**
+- [ ] Copy the key now — it is shown only once
+- [ ] Paste it into `ELEVENLABS_API_KEY` in your `.env` (or the web app's key panel)
 - [ ] Optional: to clone a voice, attach an audio sample of one sentence;
       the agent calls the Instant Voice Cloning API (`/v1/voices/add`)
 
@@ -294,6 +307,7 @@ Active email adapter: **{adapter}**. Budget guard: **${max_cost}** per deck.
 ## 4. Pre-flight verification
 - [ ] Run `python qbr_agent.py --test-keys` to check which API keys are active
       and confirm your quotas before generating.
+- [ ] Both `ANTHROPIC_API_KEY` and `ELEVENLABS_API_KEY` should show ACTIVE.
 
 ## 5. Budget guards
 - [ ] `MAX_COST_PER_DECK` (default $0.50) is a hard ceiling. The agent refuses to
@@ -303,6 +317,13 @@ Active email adapter: **{adapter}**. Budget guard: **${max_cost}** per deck.
 ## 6. Governance (built in, no setup needed)
 - [ ] Tier 1 Mythos Security Shield: injection filter, PII redaction, read-only isolation, anomaly pause
 - [ ] Tier 2 Executive Decision Framework: Red Team Check, gain/loss framing, commitment gate
+
+## 7. Prefer not to manage keys yourself? Use the Kavela marketplace agent
+- [ ] Open the **QBR Narrator Agent** listing on the Kavela marketplace
+- [ ] Click **Connect** on the Anthropic connector and paste your Anthropic key
+- [ ] Click **Connect** on the ElevenLabs connector and paste your ElevenLabs key
+- [ ] Optional: connect your email provider for one-click dispatch
+- [ ] Open the agent and paste your raw notes — same governance, same approval gate
 """
 
 
@@ -412,7 +433,7 @@ def generate_bundle(
 
     # --- Stage 5: human approval gate (never auto-dispatch) ---
     # The bundle is returned with a preview; dispatch happens only after the
-    # manager approves (see dispatch_bundle()).
+    # Customer Success Manager approves (see dispatch_bundle()).
 
     return QbrBundle(
         customer_name=qbr.customer_name,
@@ -459,7 +480,7 @@ def dispatch_bundle(
     is sent. TEST_MODE also forces the local adapter.
     """
     if not approved:
-        return {"sent": False, "reason": "Awaiting manager approval — nothing dispatched."}
+        return {"sent": False, "reason": "Awaiting Customer Success Manager approval — nothing dispatched."}
 
     test_mode = os.getenv("TEST_MODE", "true").lower() == "true"
     if test_mode:

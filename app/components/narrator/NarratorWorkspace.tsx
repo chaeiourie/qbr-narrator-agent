@@ -26,7 +26,7 @@ import { SecurityPresetsPanel } from "./SecurityPresetsPanel";
  *
  * Stage 1 input & language parity · Stage 2 tone governance · Stage 3
  * second-layer thinking · Stage 4 dual generation (deck + checklist) ·
- * Stage 5 manager preview & approval. The machine drafts; the human approves.
+ * Stage 5 Customer Success Manager preview & approval. The machine drafts; the human approves.
  */
 export function NarratorWorkspace() {
   const [customerName, setCustomerName] = useState("");
@@ -271,7 +271,7 @@ export function NarratorWorkspace() {
             {/* Stage 5 — approval gate */}
             <div className="rounded-2xl border border-[#E2DED7] bg-white p-6 shadow-sm">
               <h3 className="text-base font-semibold text-[#221521]">
-                Stage 5 — Manager approval
+                Stage 5 — Customer Success Manager approval
               </h3>
               <p className="mt-1 text-sm text-[#46464d]">
                 Nothing is sent to the customer until you approve. Review both

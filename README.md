@@ -47,38 +47,113 @@ Account review prep eats 12+ hours per account pulling data, hand-building slide
 2. **Tone Governance** — defaults to Formal (Enterprise Executive). Switch the tone, paste a sample sentence, or attach an audio sample to trigger ElevenLabs Instant Voice Cloning.
 3. **Second-Layer Thinking** — the engine checks your notes against the five required QBR sections and suggests 2-3 concrete ways to strengthen the weak ones before generating.
 4. **Dual Generation** — the deck and the setup checklist are produced together as one bundle.
-5. **Manager Preview & Approval** — nothing is dispatched until the account manager approves.
+5. **Customer Success Manager Preview & Approval** — nothing is dispatched until the Customer Success Manager approves.
 6. **Zero-Maintenance Weekly Loop** — an autonomous Monday audit scans for updates and emails you a 1-click approval.
+
+## Bring Your Own Keys (important)
+
+**This tool never uses the author's API keys, and it never asks you for a password.** You bring your own Anthropic and ElevenLabs keys, and they stay yours.
+
+- **No shared tokens.** There are no author-owned credentials baked into this repo, the web app, or any hosted instance. Every key is one *you* create on *your* account.
+- **Your keys, your account, your spend.** Generation is billed to your own Anthropic and ElevenLabs accounts. The author pays nothing on your behalf and cannot see your usage.
+- **Where your keys live.** In the web app you paste your keys into the **Connect your tools** panel; they are held only in your browser session (in-memory / local storage on your own device) and are sent *directly* to Anthropic and ElevenLabs — never to the author, never to any third-party server.
+- **In the Python engine** your keys live in a local `.env` file on your own machine. That file is git-ignored and is never committed.
+- **Nothing is shared between users.** Each CSM runs their own copy with their own keys.
+
+> If you would rather not manage keys at all, use the **Kavela marketplace agent** option in the setup guide below — you connect your own accounts once and the agent runs on your behalf.
 
 ## How to Deploy
 
-Assume you have never used a terminal. There are two ways to run this.
+Assume you have never used a terminal. There are two ways to run this — pick one.
 
-### Option A — the web app (no terminal)
+### Option A — the web app (no terminal, no install)
 
 1. Open the app — a single page with a form and a button.
-2. Fill in the customer name, target language, recipient email, and paste your raw notes.
-3. Press **Generate deck + checklist**. Review the deck slides (each with a "Listen" button) and the checklist tab.
-4. Press **Approve & queue dispatch** — only then does anything go out.
+2. In the **Connect your tools** panel, paste **your own** Anthropic and ElevenLabs keys (see the step-by-step guide below). These are your keys, stored in your browser only.
+3. Fill in the customer name, target language, recipient email, and paste your raw notes.
+4. Press **Generate deck + checklist**. Review the deck slides (each with a "Listen" button) and the checklist tab.
+5. Press **Approve & queue dispatch** — only then does anything go out.
 
 ### Option B — the Python engine (produces the real files)
 
 1. Install Python 3.11+ and, in a terminal, run `pip install -r requirements.txt`.
-2. Copy `.env.example` to `.env` and fill in the keys you have (see the checklist below).
+2. Copy `.env.example` to `.env` and fill in **your own** keys (see the step-by-step guide below).
 3. Run the pre-flight check: `python qbr_agent.py --test-keys` — this tells you which keys are active.
 4. Generate a sample bundle: `python qbr_agent.py --demo` — writes the HTML deck and the checklist to `./output`.
 
-### The keys you need (and where to get them)
-
-| Key | What it's for | Where to get it |
-|-----|---------------|-----------------|
-| `ANTHROPIC_API_KEY` | Deck text, translation & tone analysis | console.anthropic.com — needs **Build Tier 1 prepaid credit ($5 min)**, an API key (not a Claude Pro subscription) |
-| `ELEVENLABS_API_KEY` | Voice narration & Instant Voice Cloning | elevenlabs.io — requires the **Starter plan ($5/mo) or higher** |
-| `EMAIL_ADAPTER` | Which email path to use | `local` (free mock), `sendgrid`, `mailchimp`, or `smtp` |
-
 **Budget guard:** `MAX_COST_PER_DECK` (default `$0.50`) is a hard ceiling — the agent refuses to run if the projected cost would exceed it. **`TEST_MODE=true`** (the default) keeps every run local, so you can explore safely.
 
-> Without the two AI keys the engine still runs end-to-end in **local-template mode** (deck + checklist generate; audio is skipped). Add the keys to unlock live generation and voice.
+> Without the two AI keys the engine still runs end-to-end in **local-template mode** (deck + checklist generate; audio is skipped). Add your keys to unlock live generation and voice.
+
+---
+
+## Step-by-step setup: Claude and ElevenLabs
+
+This is the full walkthrough for both keys. No prior experience needed — just a web browser and a card for the two small subscriptions. Budget roughly **US$10** to get started ($5 Anthropic credit + $5/month ElevenLabs).
+
+### Part 1 — Anthropic Claude (the text, translation and tone)
+
+Claude writes and translates your slide text and reads your tone sample. You need an **API key** — this is different from a Claude Pro chat subscription.
+
+1. Go to **console.anthropic.com** and click **Sign up**. Create an account with your email (or sign in if you already have one).
+2. Verify your email, then sign in to the Console.
+3. In the left menu, open **Plans & Billing** (sometimes shown as **Billing**).
+4. Click **Add payment method** and enter a card. Anthropic's API is **prepaid** — add at least **US$5** of credit. (A Claude Pro subscription does **not** cover API usage; this is a separate, pay-as-you-go balance.)
+5. In the left menu, open **API Keys** and click **Create Key**. Name it something like `qbr-narrator`.
+6. **Copy the key now** — it starts with `sk-ant-...`. Anthropic shows it only once. Paste it somewhere safe for a moment (you will paste it into the tool next).
+7. Paste it into your `.env` file as `ANTHROPIC_API_KEY=sk-ant-...` (Option B), or into the **Connect your tools** panel (Option A).
+
+**Rough cost:** a full deck + translation is a few cents. The `MAX_COST_PER_DECK` guard stops any run that would exceed your ceiling.
+
+### Part 2 — ElevenLabs (the per-slide voice narration)
+
+ElevenLabs turns each slide's narration into a spoken MP3 in the deck's language.
+
+1. Go to **elevenlabs.io** and click **Sign up**. Create an account with your email or Google.
+2. Open **Subscription** (or **Pricing**) in the left menu and choose the **Starter** plan (**US$5/month**). Starter or higher is required for **Instant Voice Cloning** and commercial voice generation — the free tier will not unlock these.
+3. Complete checkout.
+4. In the left menu, click your **profile icon** (bottom-left) and open **API Keys** (direct link: **elevenlabs.io/app/settings/api-keys**).
+5. Click **Create API Key**, name it `qbr-narrator`, and click **Create**.
+6. **Copy the key now** — it is shown only once. Paste it somewhere safe for a moment.
+7. Paste it into your `.env` file as `ELEVENLABS_API_KEY=...` (Option B), or into the **Connect your tools** panel (Option A).
+8. *(Optional)* If you want the narration in a specific voice, copy that voice's **Voice ID** from **Voices → your voice → ID** and set `ELEVENLABS_VOICE_ID=...`. Leave it blank to use the built-in formal executive narrator.
+
+### Part 3 — Email (optional, for dispatch)
+
+Only needed if you want the agent to email the finished deck. Pick one:
+
+- **Local mock (free, default):** `EMAIL_ADAPTER=local` — writes everything to `./output`, sends nothing. Best for your first run.
+- **SendGrid (free tier, 100 emails/day):** `EMAIL_ADAPTER=sendgrid` + `SENDGRID_API_KEY` + `SENDGRID_FROM_EMAIL`.
+- **Mailchimp Transactional:** `EMAIL_ADAPTER=mailchimp` + `MAILCHIMP_API_KEY` + `MAILCHIMP_FROM_EMAIL`.
+- **SMTP (Gmail / Outlook):** `EMAIL_ADAPTER=smtp` + `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM_EMAIL`.
+
+### Part 4 — Verify your keys
+
+Run the pre-flight check to confirm both keys are active before you generate:
+
+```
+python qbr_agent.py --test-keys
+```
+
+You should see `[ACTIVE]` next to `ANTHROPIC_API_KEY` and `ELEVENLABS_API_KEY`. If a key shows `missing`, re-copy it (a trailing space is the usual culprit).
+
+---
+
+## Option C — use it as a Kavela marketplace agent (no keys to manage yourself)
+
+If you would rather not create and manage API keys, the same QBR workflow is packaged as a **Kavela marketplace agent**. You connect your own Anthropic and ElevenLabs accounts once through a secure connector, and the agent runs the full pipeline on your behalf — your keys are stored in Kavela's connector vault, never in a file on your laptop.
+
+**How to set it up:**
+
+1. Open the **QBR Narrator Agent** listing on the Kavela marketplace.
+2. Click **Connect** on the **Anthropic** connector and paste your Anthropic API key (from Part 1 above). Kavela stores it in an encrypted vault.
+3. Click **Connect** on the **ElevenLabs** connector and paste your ElevenLabs API key (from Part 2 above).
+4. *(Optional)* Connect your email provider if you want the agent to dispatch the deck for you.
+5. Open the agent and paste your raw account notes. It returns the translated deck with per-slide narration plus the setup checklist — same governance, same human approval gate.
+
+**Same guarantees, either way:** your keys are yours, nothing runs on the author's account, and nothing is dispatched to a customer without your explicit approval.
+
+> **Note on the marketplace listing:** the Kavela listing is published from this same open-source repo, so the governance controls you can read in `engine/security.py` and `engine/decision.py` are exactly what runs. There is no hidden second implementation.
 
 ---
 

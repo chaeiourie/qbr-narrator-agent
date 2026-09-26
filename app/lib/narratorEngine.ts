@@ -114,16 +114,23 @@ export function buildChecklist(input: {
 
 Generated for ${input.customerName} (${resolveLanguage(input.language)}).
 
+Bring your own keys: every key below is one YOU create on YOUR OWN
+account. Nothing runs on the author's account. Budget roughly US$10 to start.
+
 1. Anthropic (Claude) — deck text, translation & tone analysis
-   [ ] Create an account at console.anthropic.com
-   [ ] Add Build Tier 1 prepaid API credit ($5 minimum)
-   [ ] This needs an API key, NOT a Claude Pro web subscription
-   [ ] Copy the key into ANTHROPIC_API_KEY in your .env
+   [ ] Go to console.anthropic.com and click Sign up
+   [ ] Open Plans & Billing and add at least US$5 of prepaid API credit
+       (a Claude Pro subscription does NOT cover API usage)
+   [ ] Open API Keys and click Create Key (name it e.g. qbr-narrator)
+   [ ] Copy the key now (starts with sk-ant-...; shown only once)
+   [ ] Paste it into ANTHROPIC_API_KEY in your .env
 
 2. ElevenLabs — voice narration & Instant Voice Cloning
-   [ ] Create an account at elevenlabs.io
-   [ ] Subscribe to the Starter plan ($5/mo) or higher
-   [ ] Copy your key into ELEVENLABS_API_KEY in your .env
+   [ ] Go to elevenlabs.io and click Sign up
+   [ ] Open Subscription and choose the Starter plan (US$5/mo) or higher
+   [ ] Click your profile icon, open API Keys, and click Create API Key
+   [ ] Copy the key now (shown only once)
+   [ ] Paste it into ELEVENLABS_API_KEY in your .env
    [ ] Optional: attach an audio sample to clone a voice
 
 3. Email adapters — choose one
@@ -134,6 +141,7 @@ Generated for ${input.customerName} (${resolveLanguage(input.language)}).
 
 4. Pre-flight verification
    [ ] Run: python qbr_agent.py --test-keys
+   [ ] Both ANTHROPIC_API_KEY and ELEVENLABS_API_KEY should show ACTIVE
 
 5. Budget guards
    [ ] MAX_COST_PER_DECK (default $0.50) is a hard ceiling
@@ -141,5 +149,11 @@ Generated for ${input.customerName} (${resolveLanguage(input.language)}).
 
 6. Governance (built in, no setup needed)
    [ ] Tier 1 Mythos Security Shield
-   [ ] Tier 2 Executive Decision Framework`;
+   [ ] Tier 2 Executive Decision Framework
+
+7. Prefer not to manage keys yourself? Use the Kavela marketplace agent
+   [ ] Open the QBR Narrator Agent listing on the Kavela marketplace
+   [ ] Connect the Anthropic connector with your Anthropic key
+   [ ] Connect the ElevenLabs connector with your ElevenLabs key
+   [ ] Open the agent and paste your raw notes — same governance, same gate`;
 }

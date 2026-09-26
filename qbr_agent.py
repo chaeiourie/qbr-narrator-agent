@@ -85,7 +85,7 @@ def cmd_demo() -> int:
     print(f"  Slides    : {len(bundle.slides)}")
     print(f"  Language  : {bundle.language}")
     print(f"  Gaps found: {bundle.decision_log['gaps']}")
-    print("\nDispatch is gated: nothing is emailed until a manager approves.")
+    print("\nDispatch is gated: nothing is emailed until a Customer Success Manager approves.")
     return 0
 
 

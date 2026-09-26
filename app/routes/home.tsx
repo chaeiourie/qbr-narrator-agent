@@ -33,6 +33,11 @@ export default function Home() {
             the drafting, translation, and audio. You keep judgment, strategy,
             and every commitment.
           </p>
+          <p className="mx-auto mt-4 max-w-2xl text-sm text-[#6B6B72]">
+            Built for Customer Success Managers. Bring your own Anthropic and
+            ElevenLabs keys — they stay in your browser, and nothing runs on
+            anyone else's account.
+          </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a
               href="#workspace"
