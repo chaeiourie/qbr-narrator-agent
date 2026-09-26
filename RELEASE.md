@@ -9,20 +9,30 @@
 
 ## What shipped
 
-A lightweight, non-technical agent that turns raw account notes into a **translated QBR slide deck with per-slide voice narration**, plus a companion **setup & subscription checklist**.
+A lightweight, non-technical agent that turns raw account notes into a **translated QBR slide deck with per-slide voice narration**, plus a companion **setup & subscription checklist**. Built for **Customer Success Managers**.
 
 ### Feature set
-- **6-stage pipeline** — input & language parity, tone governance, second-layer thinking, dual generation, manager preview & approval, zero-maintenance weekly loop.
+- **6-stage pipeline** — input & language parity, tone governance, second-layer thinking, dual generation, Customer Success Manager preview & approval, zero-maintenance weekly loop.
 - **Deliverable A — Interactive QBR Deck:** responsive 4-slide deck, fully translated, with a "Listen" audio button pinned to every slide playing that slide's native-language narration.
-- **Deliverable B — Setup & Subscription Checklist:** exact tiers, API quotas, and setup steps for Claude, ElevenLabs and the email provider.
-- **Non-technical web app** (React Router v7): form + button, Connector Dashboard with Connected/Disconnected status, Security & Privacy Presets. No raw JSON, no terminal.
+- **Deliverable B — Setup & Subscription Checklist:** exact tiers, API quotas, and step-by-step setup for Claude, ElevenLabs and the email provider.
+- **Bring Your Own Keys:** the tool never uses the author's keys and never asks for a password. End users paste their own Anthropic + ElevenLabs keys; in the web app they stay in the user's browser only, in the engine they live in a local git-ignored `.env`.
+- **Non-technical web app** (React Router v7): form + button, Bring-Your-Own-Keys panel, Connector Dashboard with Connected/Disconnected status, Security & Privacy Presets. No raw JSON, no terminal.
 - **CLI engine** (`qbr_agent.py --test-keys / --demo / --serve`) producing the real files.
 - **Zero-manual-maintenance loop:** Monday audit workflow + release-on-approval workflow.
 
 ### Verification
 - `pytest` — **19 passed** (governance + pipeline + voice).
 - `python qbr_agent.py --demo` — generates both deliverables; deck renders 4 slides each with a pinned Listen button.
-- `npm run build` — web app builds clean.
+
+---
+
+## Changes in this revision
+
+1. **Bring Your Own Keys (no owner tokens).** Added a README section, a real BYO-key panel in the web app (keys held only in the user's browser), an updated `.env.example` header, and updated generated checklist. No author-owned credentials exist anywhere in the repo; the GitHub Actions workflows use `${{ secrets.* }}` placeholders only.
+2. **CSM terminology.** Every "account manager" reference replaced with "Customer Success Manager" across the README, engine, CLI, web app, and website.
+3. **Detailed setup guide.** Added a full step-by-step Claude + ElevenLabs walkthrough (accounts, plans, prepaid credit, API keys, verification) to the README and the generated checklist.
+4. **Kavela marketplace option.** Added "Option C" — the same workflow packaged as a Kavela marketplace agent, where users connect their own accounts through a secure connector vault instead of managing key files.
+5. **Website.** hicherietan.com now publishes **only** the QBR Narrator Agent.
 
 ---
 
@@ -38,12 +48,12 @@ A lightweight, non-technical agent that turns raw account notes into a **transla
 
 ### Tier 2 — Executive Decision Framework (`engine/decision.py`)
 - **Human-in-the-loop responsibility** — machine handles calculation & drafting; the CSM retains judgment & sign-off. The agent never dispatches to a customer or makes an irreversible commitment autonomously.
-- **Red Team Check** — tests disconfirming evidence and alternative hypotheses before presenting a risk narrative; if the pre-registered kill threshold is not met, the analysis is flagged for review rather than presented one-sided.
+- **Red Team Check** — tests disconfirming evidence and alternative hypotheses before presenting a risk narrative.
 - **Irreversible Commitment Gate** — any action that commits resources, changes terms, or dispatches to a customer is gated behind explicit human approval.
 - **Gain vs. Loss framing** — recommendations evaluated in both frames; the more persuasive frame is surfaced.
 
 ### Honesty rule
-The README states the architecture the tool is actually built on. Controls are real code modules, not marketing claims. The anomaly flag-and-pause behaviour is implemented; full runtime auto-quarantine depends on the host platform — this is stated plainly, not overclaimed.
+The README states the architecture the tool is actually built on. Controls are real code modules, not marketing claims. The anomaly flag-and-pause behaviour is implemented; full runtime auto-quarantine depends on the host platform — stated plainly, not overclaimed.
 
 ---
 
@@ -51,8 +61,8 @@ The README states the architecture the tool is actually built on. Controls are r
 
 | Tool | Status | Auth | Config keys |
 |------|--------|------|-------------|
-| Anthropic Claude | Integrated | API key | `ANTHROPIC_API_KEY` |
-| ElevenLabs | Integrated | API key | `ELEVENLABS_API_KEY` |
+| Anthropic Claude | Integrated | API key (user's own) | `ANTHROPIC_API_KEY` |
+| ElevenLabs | Integrated | API key (user's own) | `ELEVENLABS_API_KEY` |
 | Gainsight | Integrated | API key | `GAINSIGHT_API_KEY` |
 | Salesforce | Integrated | OAuth2 / JWT | `SALESFORCE_INSTANCE_URL`, `SALESFORCE_CLIENT_ID`, `SALESFORCE_CLIENT_SECRET` |
 | Zendesk | Integrated | API token | `ZENDESK_SUBDOMAIN`, `ZENDESK_API_TOKEN` |
@@ -67,6 +77,6 @@ The README states the architecture the tool is actually built on. Controls are r
 
 ## Publishing pipeline — executed
 
-- [x] **GitHub** — `chaeiourie/qbr-narrator-agent` toggled **private → public**. Confirmed `"visibility":"public"`.
-- [x] **Website** — QBR Narrator Agent added to hicherietan.com as the first "Shipped" card + a full tool page (problem, why it matters, capabilities, setup, GitHub links).
-- [x] **LinkedIn** — copy-ready draft handed to the owner (personal-profile posting requires an approved LinkedIn OAuth app; the owner posts it).
+- [x] **GitHub** — `chaeiourie/qbr-narrator-agent` public; latest commit pushed.
+- [x] **Website** — hicherietan.com publishes only the QBR Narrator Agent.
+- [x] **LinkedIn** — copy-ready draft in `LINKEDIN.md` for the owner to post.
